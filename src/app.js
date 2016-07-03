@@ -23,11 +23,7 @@ app.get('/data.html', (req, res) => {
 
 app.post('/getUrls', (req, res) => {
     console.log(req);
-    cheerio.getResult(req.body.url, req.body.season)
-        .then(
-            response => res.send(response),
-            error => res.status(500).send(error)
-        );
+    return cheerio.getResult(req, res);
 });
 
 app.listen(port, () => console.log(`Serial Downloader Listening on ${port}!`));

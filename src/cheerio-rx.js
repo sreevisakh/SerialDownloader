@@ -4,7 +4,32 @@ var request = require('request');
 var _ = require('lodash');
 var cheerio = require('cheerio');
 
-var fetchContent = function(params) {
+
+//var url = 'http://thewatchseries.to/serie/the_flash_2014_';
+//season = 1;
+exports.getResult = function(req, res) {
+    var result = '';
+    fetchContent({
+            url: req.body.url
+        }, req.body.season)
+        .flatMap(getEpisodeRange)
+        .map(formEpisodeUrl.bind(null, req.body.url, req.body.season))
+        .flatMap(downloadHtml)
+        .map(getGorillaUrl)
+        .flatMap(postToGorilla)
+        .map(getVideoUrl)
+        .flatMap(prepareHtml)
+        .subscribe(function(data) {
+            result += data;
+        }, function(error) {
+            res.send(JSON.stringify(error))
+        }, function() {
+            res.send(result);
+        });
+}
+
+
+function fetchContent(params) {
     console.log(params.url);
     var args = [].slice.call(arguments, 1)
     return Rx.Observable.create(function(observer) {
@@ -22,26 +47,9 @@ var fetchContent = function(params) {
         })
     });
 };
-var url = 'http://thewatchseries.to/serie/the_flash_2014_';
-season = 1;
 
-var params = {
-    url
-}
-fetchContent(params, 1)
-    .flatMap(getEpisodeRange)
-    .map(formEpisodeUrl)
-    .flatMap(downloadHtml)
-    .map(getGorillaUrl)
-    .map(postToGorilla)
-    .map(getVideoUrl)
-    .flatMap(prepareHtml)
-    .subscribe();
-
-function prepareHtml(urls) {
-    return urls.map(function(url) {
-        return '<a href=${url}></a>';
-    });
+function prepareHtml(url) {
+    return `<a href=${url}></a>`;
 }
 
 function fileName(url, season, episode) {
@@ -51,9 +59,9 @@ function fileName(url, season, episode) {
         });
 }
 
-function getVideoUrl(body) {
+function getVideoUrl(data) {
     var pattern = /"http(.*)(\.flv|\.mkv|\.mp4)"/;
-    var matches = pattern.exec(body);
+    var matches = pattern.exec(data.body);
     if (matches && matches[0]) {
         return matches[0]
     } else {
@@ -63,23 +71,28 @@ function getVideoUrl(body) {
 
 function postToGorilla(url) {
     var params = {
-        url,
+        url: url,
         method: 'POST',
         headers: {
             'content-type': 'application/x-www-form-urlencoded',
         },
         form: {
             op: 'download1',
-            method_free: 'Free+Download'
+            method_free: 'Free+Download',
+            id: _.last(url.split('/')),
         }
     }
     return fetchContent(params)
 }
 
 function getGorillaUrl(data) {
-    var $ = cheerio.load(data.body);
-    var url = $('a[title="gorillavid.in"]').first().attr('href').split('=')[1]
-    return url = new Buffer(url, 'base64').toString('ascii');
+    try {
+        var $ = cheerio.load(data.body);
+        var url = $('a[title="gorillavid.in"]').first().attr('href').split('=')[1]
+        return url = new Buffer(url, 'base64').toString('ascii');
+    } catch (error) {
+        return Rx.Observable.just(null);
+    }
 }
 
 function downloadHtml(url) {
@@ -88,7 +101,7 @@ function downloadHtml(url) {
     });
 }
 
-function formEpisodeUrl(episode) {
+function formEpisodeUrl(url, season, episode) {
     return url.replace('/serie/', '/episode/').concat(`_s${season}_e${episode}.html`);
 }
 
