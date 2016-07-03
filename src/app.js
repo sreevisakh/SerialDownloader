@@ -1,5 +1,5 @@
 var express = require('express');
-var cheerio = require('./cheerio');
+var cheerio = require('./cheerio-rx');
 var bodyParser = require('body-parser')
 var app = express();
 
@@ -13,10 +13,13 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json())
 
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/data.html', (req, res) => {
+    res.sendFile(__dirname + '/data.html');
+});
 
 app.post('/getUrls', (req, res) => {
     console.log(req);

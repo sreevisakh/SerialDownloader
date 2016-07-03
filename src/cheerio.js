@@ -1,11 +1,14 @@
 /* global Buffer,process */
 
-var cheerio = require('cheerio');
-var request = require('request');
-var _ = require('lodash');
-var fs = require('fs');
-var q = require('q');
-var util = require('./util');
+import cheerio from 'cheerio';
+import request from 'request';
+import _ from 'lodash';
+import fs from 'fs';
+import q from 'q';
+import util from './util';
+import Rx from 'rx';
+import RxNode from 'rx-node';
+
 
 var postOptions = {
     method: 'POST',
@@ -19,6 +22,20 @@ var postOptions = {
 };
 
 
+function findEpisodeRangeInSeason(url, season) {
+    var defered = q.defer();
+    request(url, function(error, response, html) {
+        if (!error && response.statusCode == 200) {
+            var $ = cheerio.load(html);
+            var count = $('span:contains("Season ' + parseInt(season) + '")').parents('h2').siblings('ul').children('li').length;
+            defered.resolve(_.range(1, count, 1));
+        } else {
+            defered.reject('FindEpisode');
+        }
+    });
+    return defered.promise;
+}
+
 exports.getResult = function(url, season) {
     var htmlPromises = [];
     var downloadPromises = [];
@@ -27,7 +44,7 @@ exports.getResult = function(url, season) {
         url = url.replace('/serie/', '/episode/');
         url = url + '_s' + season + '_e${id}.html';
         _.each(range, function(id) {
-            var name = util.findName(url) + " S" + ("0" + util.findSeason(url)).slice(-2) + "E" + ("0" + id).slice(-2);
+            var name = util.findName(url) + ' S' + ('0' + util.findSeason(url)).slice(-2) + 'E' + ('0' + id).slice(-2);
             var subUrl = url.replace('${id}', id);
             htmlPromises.push(getHtml(subUrl, name));
         });
@@ -51,19 +68,6 @@ exports.getResult = function(url, season) {
     return defered.promise;
 };
 
-function findEpisodeRangeInSeason(url, season) {
-    var defered = q.defer();
-    request(url, function(error, response, html) {
-        if (!error && response.statusCode == 200) {
-            var $ = cheerio.load(html);
-            var count = $('span:contains("Season ' + parseInt(season) + '")').parents('h2').siblings('ul').children('li').length;
-            defered.resolve(_.range(1, count, 1));
-        } else {
-            defered.reject('FindEpisode');
-        }
-    });
-    return defered.promise;
-}
 
 function getHtml(url, name) {
     var defered = q.defer();
