@@ -4,9 +4,6 @@ var request = require('request');
 var _ = require('lodash');
 var cheerio = require('cheerio');
 
-
-//var url = 'http://thewatchseries.to/serie/the_flash_2014_';
-//season = 1;
 exports.getResult = function(req, res) {
     var result = '';
     fetchContent({
