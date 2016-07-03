@@ -1,6 +1,7 @@
 #Running
 
 ```npm install```
-```npm start````
+
+```npm start```
 
 Open Browser in http://localhost:3000
