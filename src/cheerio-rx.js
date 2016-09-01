@@ -35,9 +35,10 @@ function fetchContent(params) {
                 observer.onError();
             } else {
                 observer.onNext({
-                    response: response,
-                    body: body,
-                    args: args
+                    name: params.name,
+                    response,
+                    body,
+                    args
                 });
             }
             observer.onCompleted();
@@ -45,29 +46,27 @@ function fetchContent(params) {
     });
 };
 
-function prepareHtml(url) {
-    return `<a href=${url}></a>`;
+function prepareHtml({ url, name }) {
+    return `<a href=${url}>${name}</a><br>`;
 }
 
 function fileName(url, season, episode) {
-    return Rx.Observable.just(url.split('/'))
-        .last().map(function(name) {
-            return name.replace('_', ' ').concat(` S${season}E${episode}`);
-        });
+    return _.last(url.split('/')).replace('_', ' ').concat(' S' + ('0' + (season+'')).slice(-2) + 'E' + ('0' + (episode+'')).slice(-2))
 }
 
 function getVideoUrl(data) {
     var pattern = /"http(.*)(\.flv|\.mkv|\.mp4)"/;
     var matches = pattern.exec(data.body);
     if (matches && matches[0]) {
-        return matches[0]
+        return { url: matches[0], name: data.name }
     } else {
         return null;
     }
 }
 
-function postToGorilla(url) {
+function postToGorilla({ url, name }) {
     var params = {
+        name: name,
         url: url,
         method: 'POST',
         headers: {
@@ -86,20 +85,21 @@ function getGorillaUrl(data) {
     try {
         var $ = cheerio.load(data.body);
         var url = $('a[title="gorillavid.in"]').first().attr('href').split('=')[1]
-        return url = new Buffer(url, 'base64').toString('ascii');
+        return { url: new Buffer(url, 'base64').toString('ascii'), name: data.name };
     } catch (error) {
         return Rx.Observable.just(null);
     }
 }
 
-function downloadHtml(url) {
+function downloadHtml({ url, name }) {
     return fetchContent({
-        url
+        url,
+        name
     });
 }
 
 function formEpisodeUrl(url, season, episode) {
-    return url.replace('/serie/', '/episode/').concat(`_s${season}_e${episode}.html`);
+    return { url: url.replace('/serie/', '/episode/').concat(`_s${season}_e${episode}.html`), name: fileName(url, season, episode) };
 }
 
 function getEpisodeRange(data) {

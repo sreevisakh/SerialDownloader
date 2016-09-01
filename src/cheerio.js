@@ -36,11 +36,12 @@ function findEpisodeRangeInSeason(url, season) {
     return defered.promise;
 }
 
-exports.getResult = function(url, season) {
+exports.getResult = function(req,res) {
+    var url = req.body.url,season  = req.body.season;
     var htmlPromises = [];
     var downloadPromises = [];
     var defered = q.defer();
-    findEpisodeRangeInSeason(url, season).then(function(range) {
+    findEpisodeRangeInSeason(req.body.url, req.body.season).then(function(range) {
         url = url.replace('/serie/', '/episode/');
         url = url + '_s' + season + '_e${id}.html';
         _.each(range, function(id) {
