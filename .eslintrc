@@ -1,19 +1,9 @@
 {
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module"
-    },
-    "env": {
-        "browser": true,
-        "node": true,
-        "es6": true
-    },
-    "rules": {
-        "strict": 0,
-        "no-underscore-dangle": 0,
-        "quotes": [
-            2,
-            "single"
-        ]
+    "parser": "babel-eslint",
+    "parserOptions": { "ecmaFeatures": { "esversion": 6 } },
+    "env": { "browser": true, "node": true, "es6": true },
+    "extends": ["eslint:recommended"],
+    "globals": {
+        "angular": true
     }
 }

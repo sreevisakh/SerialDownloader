@@ -1,0 +1,1 @@
+{"version":3,"sources":["config.js"],"names":["watchseries","url"],"mappings":";;;;;kBAAe;AACXA,iBAAa;AACTC,aAAK;AADI;AADF,C","file":"config.js","sourcesContent":["export default {\n    watchseries: {\n        url: 'http://the-watch-series.to/',\n    }\n}"],"sourceRoot":"/source/"}

@@ -6,8 +6,6 @@ import _ from 'lodash';
 import fs from 'fs';
 import q from 'q';
 import util from './util';
-import Rx from 'rx';
-import RxNode from 'rx-node';
 
 
 var postOptions = {
@@ -20,7 +18,6 @@ var postOptions = {
         method_free: 'Free+Download'
     }
 };
-
 
 function findEpisodeRangeInSeason(url, season) {
     var defered = q.defer();
@@ -36,8 +33,9 @@ function findEpisodeRangeInSeason(url, season) {
     return defered.promise;
 }
 
-exports.getResult = function(req,res) {
-    var url = req.body.url,season  = req.body.season;
+exports.getResult = function(req, res) {
+    var url = req.body.url,
+        season = req.body.season;
     var htmlPromises = [];
     var downloadPromises = [];
     var defered = q.defer();
@@ -76,8 +74,13 @@ function getHtml(url, name) {
     request(url, function(error, response, html) {
         if (!error && response.statusCode == 200) {
             var $ = cheerio.load(html);
-            var url = $('a[title="gorillavid.in"]').first().attr('href').split('=')[1]
-            url = new Buffer(url, 'base64').toString('ascii');
+            try {
+                var url = $('a[title="gorillavid.in"]').first().attr('href').split('=')[1];
+                url = new Buffer(url, 'base64').toString('ascii');
+            } catch (e) {
+                url = null;
+            }
+
             defered.resolve({
                 url: url,
                 name: name
@@ -92,12 +95,14 @@ function getHtml(url, name) {
 }
 
 function download(url, name) {
+    if (!url) return $q.reject('Url is empty');
     console.log('Downloading ' + name);
     var options = postOptions;
     options.url = url;
     options.form.id = util.getVideoId(url);
     var defered = q.defer();
     request(options, function(error, response, body) {
+        console.log('Downloading done:' + name);
         if (error) {
             defered.reject('Download' + url);
         }

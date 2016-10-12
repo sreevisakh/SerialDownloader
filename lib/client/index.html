@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="bootstrap.min.css">
+
+</head>
+
+<body ng-app="SerialApp">
+    <!--[if lt IE 7]>
+            <p class=" browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <div class="container" ng-include="'nav/nav.html'"></div>
+    <div class="container" ng-controller="SearchController">
+        <div class=" panel panel-default">
+            <div class=" panel-body">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="exampleInputAmount" placeholder="Search" ng-model="searchText">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="search()" ng-if="!loading">Go!</button>
+                        <button type="button" class="btn btn-default" ng-if="loading">Loading..</button>
+                    </span>
+                </div>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li ng-repeat="item in result" class="list-group-item" ng-click="showSerial(serial)">{{item.label}}</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="bundle.js"></script>
+    <!-- Latest compiled and minified JS -->
+</body>
+
+</html>

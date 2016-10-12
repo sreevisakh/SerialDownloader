@@ -33,13 +33,16 @@ function fetchContent(params) {
         request(params, function(error, response, body) {
             if (error) {
                 observer.onError();
-            } else {
+            } else if (response.statusCode === 200) {
                 observer.onNext({
                     name: params.name,
                     response,
                     body,
                     args
                 });
+            } else {
+
+                observer.onError();
             }
             observer.onCompleted();
         })
@@ -51,7 +54,7 @@ function prepareHtml({ url, name }) {
 }
 
 function fileName(url, season, episode) {
-    return _.last(url.split('/')).replace('_', ' ').concat(' S' + ('0' + (season+'')).slice(-2) + 'E' + ('0' + (episode+'')).slice(-2))
+    return _.last(url.split('/')).replace('_', ' ').concat(' S' + ('0' + (season + '')).slice(-2) + 'E' + ('0' + (episode + '')).slice(-2))
 }
 
 function getVideoUrl(data) {
