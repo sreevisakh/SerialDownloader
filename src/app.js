@@ -1,5 +1,5 @@
 var express = require('express');
-var cheerio = require('./cheerio-rx');
+var cheerio = require('./cheerio');
 var bodyParser = require('body-parser')
 var app = express();
 
