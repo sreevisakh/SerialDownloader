@@ -18,31 +18,8 @@
 
 </head>
 
-<body ng-app="SerialApp">
-    <!--[if lt IE 7]>
-            <p class=" browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-    <div class="container" ng-include="'nav/nav.html'"></div>
-    <div class="container" ng-controller="SearchController">
-        <div class=" panel panel-default">
-            <div class=" panel-body">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="exampleInputAmount" placeholder="Search" ng-model="searchText">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="search()" ng-if="!loading">Go!</button>
-                        <button type="button" class="btn btn-default" ng-if="loading">Loading..</button>
-                    </span>
-                </div>
-            </div>
-            <div class="panel-body">
-                <ul class="list-group">
-                    <li ng-repeat="item in result" class="list-group-item" ng-click="showSerial(serial)">{{item.label}}</li>
-                </ul>
-            </div>
-
-        </div>
-    </div>
-
+<body>
+    <div id="app"></div>
     <script src="bundle.js"></script>
     <!-- Latest compiled and minified JS -->
 </body>

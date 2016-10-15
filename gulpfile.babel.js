@@ -1,41 +1,29 @@
-var browserify = require('browserify');
-var gulp = require('gulp');
-var source = require('vinyl-source-stream');
-var babelify = require('babelify');
+import gulp from 'gulp';
 import babel from 'gulp-babel';
 import sourcemaps from 'gulp-sourcemaps';
 // import print from 'gulp-debug';
 import newer from 'gulp-newer';
-import nodemon from 'gulp-nodemon';
-import buffer from 'vinyl-buffer';
-
-gulp.task('browserify', function() {
-    return browserify('src/client/app.js', { debug: true })
-        .transform(babelify, { sourceMaps: true })
-        .bundle()
-        .pipe(source('bundle.js'))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('lib/client/'))
-        .on('error', () => console.log('Error'));
-});
-gulp.task('copy', (done) => {
-    gulp.src('src/**/*.html').pipe(gulp.dest('lib'))
-    gulp.src('src/**/*.css').pipe(gulp.dest('lib'))
-    done()
-});
-
+import gutil from 'gutil';
+var webpack = require('webpack-stream');
 gulp.task('babel:server', () => {
     return gulp.src('src/server/**/*.js')
         .pipe(newer('lib/'))
         .pipe(sourcemaps.init())
         .pipe(babel())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('lib/server')).on('error', (error) => console.log(error));
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('lib/server')).on('error', (error) => gutil.log('[babel:server]', error));
 });
 
-gulp.task('build', gulp.parallel('browserify', 'babel:server', 'copy'));
+gulp.task('copy', () => {
+    return gulp.src(['src/client/index.html', 'src/client/bootstrap.min.css']).pipe(gulp.dest('lib/client'));
+})
+gulp.task('webpack', function() {
+    return gulp.src('src/client/app.js')
+        .pipe(webpack(require('./webpack.config.js')).on('error', (error) => gutil.log('[webpack]', error)))
+        .pipe(gulp.dest('lib/client/')).on('error', (error) => gutil.log(error));
+});
+
+gulp.task('build', gulp.parallel('webpack', 'babel:server', 'copy'));
 
 gulp.task('serve', gulp.series('build', (done) => {
     // var stream = nodemon({
@@ -55,8 +43,7 @@ gulp.task('serve', gulp.series('build', (done) => {
     //         stream.emit('restart', 10) // restart the server in 10 seconds 
     //     })
 
-    gulp.watch('src/client/**/*.js', gulp.series('browserify'));
-    gulp.watch('src/**/*.{html,css}', gulp.series('copy'));
+    gulp.watch('src/client/**/*.js', gulp.series('webpack'));
     gulp.watch('src/server/**/*.js', gulp.series('babel:server'));
     done();
 }));

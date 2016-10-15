@@ -1,10 +1,23 @@
-import 'babel-polyfill';
-import angular from 'angular';
+import React from 'react';
+import ReactDom from 'react-dom';
+import Nav from './nav/nav.component';
+import Search from './search/search.component';
 
-import SearchController from './search/search.controller';
-import SerialService from './serial.service';
+class App extends React.Component {
+    constructor(props){
+        super(props);
+    }
+    render(){
+        return (
+            <div className="container">
+            <Nav></Nav>
+            <Search></Search>
+            </div>
+        )
+    }
+}
 
-let app = angular.module('SerialApp', [])
-
-app.service('SerialService', SerialService);
-app.controller('SearchController', SearchController);
+ReactDom.render( 
+	<App></App>,
+    document.getElementById('app')
+);

@@ -5,12 +5,6 @@ import path from 'path';
 import Router from './router';
 var app = express();
 
-Router(app);
-
-app.use(express.static(path.resolve(__dirname, '../client')));
-
-var port = process.env.PORT || 3000;
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: false
@@ -18,6 +12,14 @@ app.use(bodyParser.urlencoded({
 
 // parse application/json
 app.use(bodyParser.json())
+
+Router(app);
+
+app.use(express.static(path.resolve(__dirname, '../client')));
+
+var port = process.env.PORT || 3000;
+
+
 
 app.get('/', (req, res) => {
     console.log('/');

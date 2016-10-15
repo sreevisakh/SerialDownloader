@@ -15,9 +15,13 @@ export default (app) => {
                 method: 'POST',
                 form: {
                     term: searchText
-                }
+                },
+                'content-type': 'text/json'
             }
-            request(options).then(response => {
+            request(options).then((response) => {
+                res.set({
+                    'content-type': 'text/json'
+                })
                 return res.status(200).send(response);
             }, error => {
                 w.error(error);
