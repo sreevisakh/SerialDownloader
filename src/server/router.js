@@ -29,5 +29,7 @@ export default (app) => {
             })
         }
     });
-    app.get('/api/serial/:id', watchseries.getSerialDetails)
+    app.get('/api/serial/:id', watchseries.getSerialDetails);
+
+    app.post('/api/video', watchseries.getVideoUrl);
 }

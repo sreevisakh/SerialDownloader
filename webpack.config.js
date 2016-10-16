@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 module.exports = {
     devtool: 'source-map',
     entry: './src/client/app.js',
@@ -9,14 +10,17 @@ module.exports = {
         inline: true,
         contentBase: './lib/client'
     },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ],
     module: {
         loaders: [{
-            test: /\.jsx?$/,
+            test: /\.js?$/,
             exclude: /(node_modules)/,
             loader: 'babel',
             query: {
                 presets: ['react', 'es2015'],
-                plugins: ["transform-regenerator", "transform-function-bind"]
+                plugins: ["transform-regenerator", "transform-function-bind", "react-hot-loader/babel"]
             }
         }]
     }

@@ -15,12 +15,13 @@ gulp.task('babel:server', () => {
 });
 
 gulp.task('copy', () => {
-    return gulp.src(['src/client/index.html', 'src/client/bootstrap.min.css']).pipe(gulp.dest('lib/client'));
+    return gulp.src(['src/client/index.html', 'src/client/bootstrap.min.css', 'src/client/**/*.css']).pipe(gulp.dest('lib/client'));
 })
 gulp.task('webpack', function() {
     return gulp.src('src/client/app.js')
-        .pipe(webpack(require('./webpack.config.js')).on('error', (error) => gutil.log('[webpack]', error)))
-        .pipe(gulp.dest('lib/client/')).on('error', (error) => gutil.log(error));
+        .pipe(webpack(require('./webpack.config.js')))
+        .pipe(gulp.dest('lib/client/'))
+        .on('error', (error) => gutil.log(error));
 });
 
 gulp.task('build', gulp.parallel('webpack', 'babel:server', 'copy'));

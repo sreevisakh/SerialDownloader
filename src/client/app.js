@@ -4,20 +4,18 @@ import Nav from './nav/nav.component';
 import Search from './search/search.component';
 
 class App extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
     }
-    render(){
+    render() {
         return (
             <div className="container">
-            <Nav></Nav>
-            <Search></Search>
+                <Nav></Nav>
+                <Search></Search>
             </div>
         )
     }
 }
 
-ReactDom.render( 
-	<App></App>,
-    document.getElementById('app')
-);
+ReactDom.render(
+    <App></App>, document.getElementById('app'));
