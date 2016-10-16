@@ -2,7 +2,7 @@
 1 verbose cli [ '/home/sv/.nvm/versions/node/v6.3.1/bin/node',
 1 verbose cli   '/home/sv/.nvm/versions/node/v6.3.1/bin/npm',
 1 verbose cli   'version',
-1 verbose cli   'patch' ]
+1 verbose cli   'minor' ]
 2 info using npm@3.10.3
 3 info using node@v6.3.1
 4 info git [ 'status', '--porcelain' ]
@@ -21,7 +21,7 @@
 5 verbose stack     at Pipe._handle.close [as _onclose] (net.js:492:12)
 6 verbose cwd /home/sv/projects/utils/SerialKiller
 7 error Linux 4.4.0-42-generic
-8 error argv "/home/sv/.nvm/versions/node/v6.3.1/bin/node" "/home/sv/.nvm/versions/node/v6.3.1/bin/npm" "version" "patch"
+8 error argv "/home/sv/.nvm/versions/node/v6.3.1/bin/node" "/home/sv/.nvm/versions/node/v6.3.1/bin/npm" "version" "minor"
 9 error node v6.3.1
 10 error npm  v3.10.3
 11 error Git working directory not clean.
