@@ -1,5 +1,4 @@
 var Rx = require('rx');
-var RxNode = require('rx-node');
 var request = require('request');
 var _ = require('lodash');
 var cheerio = require('cheerio');
@@ -51,7 +50,7 @@ function prepareHtml({ url, name }) {
 }
 
 function fileName(url, season, episode) {
-    return _.last(url.split('/')).replace('_', ' ').concat(' S' + ('0' + (season+'')).slice(-2) + 'E' + ('0' + (episode+'')).slice(-2))
+    return _.last(url.split('/')).replace('_', ' ').concat(' S' + ('0' + (season + '')).slice(-2) + 'E' + ('0' + (episode + '')).slice(-2))
 }
 
 function getVideoUrl(data) {

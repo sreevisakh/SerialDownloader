@@ -7,7 +7,6 @@ import fs from 'fs';
 import q from 'q';
 import util from './util';
 import Rx from 'rx';
-import RxNode from 'rx-node';
 
 
 var postOptions = {
