@@ -75,7 +75,7 @@ function getHtml(url, name) {
     var defered = q.defer();
     console.log('Getting HTML - ', url);
     request(url, function(error, response, html) {
-        if (!error && response.statusCode == 200) {
+        if (!error && response && response.statusCode == 200) {
             var $ = cheerio.load(html);
             try {
                 var url = $('a[title="gorillavid.in"]').first().attr('href').split('=')[1]
