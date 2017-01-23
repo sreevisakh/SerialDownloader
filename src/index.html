@@ -27,13 +27,17 @@
             <div class="col-md-8 col-md-offset-2">
                 <form onsubmit="getUrls(event)">
                     <div class="form-group">
-                        <label for="email">Serial Url</label>
+                        <label for="url">Serial Url</label>
                         <input type="url" class="form-control" id="url" required pattern='http://.*/serie/.*'>
                         <small>http://thewatchseries.to/serie/arrested_development</small>
                     </div>
                     <div class="form-group">
-                        <label for="email">Season</label>
+                        <label for="season">Season</label>
                         <input type="number" class="form-control" id="season" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="episode">Episode</label>
+                        <input type="number" class="form-control" id="episode">
                     </div>
                     <input type="submit" value="Get Urls" id="button">
                     <input type="button" onclick="download()" value="I am feeling lucky">
@@ -52,7 +56,7 @@
     function getUrls(e) {
         e.preventDefault();
         if ($('#button').val() === "Loading") {
-            return false
+            return false;
         }
 
         var data = {
@@ -61,7 +65,7 @@
         }
 
         //$('#button ').val("Loading ")
-        $.post('/getUrls', data, function(response) {
+        $.get('/getUrls', data, function(response) {
             $('#result').html(response);
             $('#button').val("Get Urls")
         })

@@ -38,8 +38,8 @@ function findEpisodeRangeInSeason(url, season) {
 }
 
 exports.getResult = function(req, res) {
-    var url = req.body.url,
-        season = req.body.season;
+    var url = req.params.url,
+        season = req.params.season;
     var htmlPromises = [];
     var downloadPromises = [];
     var defered = q.defer();
