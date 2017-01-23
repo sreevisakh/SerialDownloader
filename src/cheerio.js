@@ -39,10 +39,22 @@ function findEpisodeRangeInSeason(url, season) {
 
 exports.getResult = function(req, res) {
     var url = req.params.url,
-        season = req.params.season;
+        season = req.params.season,
+        episode = parseInt(req.params.episode);
     var htmlPromises = [];
     var downloadPromises = [];
     var defered = q.defer();
+
+    if(episode){
+        url = url.replace('/serie/', '/episode/');
+        url = url + '_s' + season + '_e' + episode + '.html';
+        var name = util.findName(url) + ' S' + ('0' + util.findSeason(url)).slice(-2) + 'E' + ('0' + episode).slice(-2);
+        getHtml(url,name).then(function(gorillaUrl){
+            return download(data.value.url, data.value.name);
+        }).then(function(){
+
+        });
+    }
     findEpisodeRangeInSeason(req.body.url, req.body.season).then(function(range) {
         url = url.replace('/serie/', '/episode/');
         url = url + '_s' + season + '_e${id}.html';

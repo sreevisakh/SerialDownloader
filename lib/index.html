@@ -51,18 +51,27 @@
 <script>
     function getUrls(e) {
         e.preventDefault();
+        $('#result').html();
         if ($('#button').val() === "Loading") {
-            return false
+            return false;
         }
 
         var data = {
             url: $('#url').val(),
-            season: $('#season').val()
+            season: $('#season').val(),
+
         }
 
-        //$('#button ').val("Loading ")
-        $.post('/getUrls', data, function(response) {
+        if($('#episode').val()){
+            data.episode = $('#episode').val();
+        }
+
+        $('#button ').val("Loading")
+        $.get('/getUrls', data, function(response) {
             $('#result').html(response);
+            $('#button').val("Get Urls")
+        },function(error){
+            $('#result').html(error);
             $('#button').val("Get Urls")
         })
         return false;
