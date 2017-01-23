@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
     <div class="container container-fluid">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -40,7 +39,6 @@
                 </form>
                 <div class="well" style="margin-top:20px;">
                     <div id="result">
-
                     </div>
                 </div>
             </div>
@@ -49,7 +47,10 @@
     <script src="https://code.jquery.com/jquery-3.0.0.min.js "></script>
 </body>
 <script>
-    function getUrls(e) {
+function getUrls(e) {
+    try {
+
+
         e.preventDefault();
         $('#result').html();
         if ($('#button').val() === "Loading") {
@@ -60,26 +61,28 @@
             url: $('#url').val(),
             season: $('#season').val(),
 
-        }
+        };
 
-        if($('#episode').val()){
+        if ($('#episode').val()) {
             data.episode = $('#episode').val();
         }
 
-        $('#button ').val("Loading")
+        $('#button ').val("Loading");
+
         $.post('/getUrls', data, function(response) {
             $('#result').html(response);
-            $('#button').val("Get Urls")
-        },function(error){
-            $('#result').html(error);
-            $('#button').val("Get Urls")
-        })
+            $('#button').val("Get Urls");
+        });
         return false;
+    } catch (error) {
+        $('#result').html(error);
+        $('#button').val("Get Urls");
     }
+}
 
-    function download() {
-        getUrls();
-    }
+function download() {
+    getUrls();
+}
 </script>
 
 </html>
