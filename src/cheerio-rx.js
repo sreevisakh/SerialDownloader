@@ -105,5 +105,5 @@ function getEpisodeRange(data) {
     var $ = cheerio.load(data.body);
     return _.range(1, ($('span').filter(function() {
         return $(this).text() === `Season ${data.args[0]}`;
-    }).parents('h2').siblings('ul').children('li').length) + 1 || 0, 1);
+    }).parents('h2').siblings('ul').children('li').length) + 2 || 0, 1);
 }
