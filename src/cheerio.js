@@ -29,7 +29,7 @@ function findEpisodeRangeInSeason(url, season) {
         if (!error && response.statusCode == 200) {
             var $ = cheerio.load(html);
             var count = $('span:contains("Season ' + parseInt(season) + '")').parents('h2').siblings('ul').children('li').length;
-            defered.resolve(_.range(1, count+1, 1));
+            defered.resolve(_.range(1, count, 1));
         } else {
             defered.reject('FindEpisode');
         }

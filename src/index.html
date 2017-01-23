@@ -70,9 +70,12 @@
             data.episode = $('#episode').val();
         }
 
-        //$('#button ').val("Loading ")
+        $('#button ').val("Loading")
         $.get('/getUrls', data, function(response) {
             $('#result').html(response);
+            $('#button').val("Get Urls")
+        },function(error){
+            $('#result').html(error);
             $('#button').val("Get Urls")
         })
         return false;
