@@ -67,7 +67,7 @@
         }
 
         $('#button ').val("Loading")
-        $.get('/getUrls', data, function(response) {
+        $.post('/getUrls', data, function(response) {
             $('#result').html(response);
             $('#button').val("Get Urls")
         },function(error){
