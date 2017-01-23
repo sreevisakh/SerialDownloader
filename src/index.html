@@ -55,13 +55,19 @@
 <script>
     function getUrls(e) {
         e.preventDefault();
+        $('#result').html();
         if ($('#button').val() === "Loading") {
             return false;
         }
 
         var data = {
             url: $('#url').val(),
-            season: $('#season').val()
+            season: $('#season').val(),
+
+        }
+
+        if($('#episode').val()){
+            data.episode = $('#episode').val();
         }
 
         //$('#button ').val("Loading ")
