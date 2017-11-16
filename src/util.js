@@ -11,7 +11,7 @@ function findName(url) {
 }
 
 function findSeason(url) {
-    var regex = /_s([0-9])_/;
+    var regex = /_s([0-9]+)_/;
     var matches = url.match(regex);
     if (matches && matches[1]) {
         return parseInt(matches[1]);
